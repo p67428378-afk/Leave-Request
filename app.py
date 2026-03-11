@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
-from models import db, Employee, LeaveBalance, LeaveRequest, Holiday
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 from config import DevelopmentConfig, TestingConfig
 import os
+
+db = SQLAlchemy()
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
@@ -12,6 +14,8 @@ def create_app(config_class=DevelopmentConfig):
         app.config.from_object(config_class)
 
     db.init_app(app)
+
+    from models import Employee, LeaveBalance, LeaveRequest, Holiday
 
     with app.app_context():
         db.create_all()
