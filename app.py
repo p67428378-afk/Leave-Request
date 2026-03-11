@@ -15,10 +15,11 @@ def create_app(config_class=DevelopmentConfig):
     from routes import api
     app.register_blueprint(api, url_prefix='/api')
 
+    with app.app_context():
+        db.create_all()
+
     return app
 
 if __name__ == '__main__':
     app = create_app()
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
