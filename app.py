@@ -1,10 +1,8 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from models import db
 from datetime import datetime, timedelta
 from config import DevelopmentConfig, TestingConfig
 import os
-
-db = SQLAlchemy()
 
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
@@ -16,9 +14,6 @@ def create_app(config_class=DevelopmentConfig):
     db.init_app(app)
 
     from models import Employee, LeaveBalance, LeaveRequest, Holiday
-
-    with app.app_context():
-        db.create_all()
 
     @app.route('/api/leaves/apply', methods=['POST'])
     def apply_leave():
@@ -89,4 +84,6 @@ def create_app(config_class=DevelopmentConfig):
 
 if __name__ == '__main__':
     app = create_app()
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
